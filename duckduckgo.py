@@ -5,8 +5,9 @@
 #
 # See LICENSE for terms of usage, modification and redistribution.
 
-import urllib
+from urllib.parse import urlencode
 from urllib.request import urlopen
+from urllib import request as req
 import json as j
 import sys
 
@@ -47,12 +48,12 @@ def query(query, useragent='python-duckduckgo '+str(__version__), safesearch=Tru
         'd': meanings,
         }
     params.update(kwargs)
-    encparams = urllib.urlencode(params)
+    encparams = urlencode(params)
     url = 'http://api.duckduckgo.com/?' + encparams
 
-    request = urllib.request.Request(url, headers={'User-Agent': useragent})
+    request = req.Request(url, headers={'User-Agent': useragent})
     response = urlopen(request)
-    json = j.loads(response.read())
+    json = j.loads(response.read().decode("utf-8"))
     response.close()
 
     return Results(json)
